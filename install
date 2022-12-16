@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+# Install xCode cli tools
+echo "Installing commandline tools..."
+xcode-select --install
+
+# macOS Settings
+echo "Changing macOS defaults..."
+defaults write com.apple.spaces spans-displays -bool false
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock mru-spaces -bool false # Mission Control Auto Arange Spaces
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
+# defaults write NSGlobalDomain AppleHighlightColor -string "0.65098 0.85490 0.58431"
+# defaults write NSGlobalDomain AppleAccentColor -int 1
+defaults write com.apple.screencapture location -string "$HOME/Desktop"
+defaults write com.apple.screencapture disable-shadow -bool true
+defaults write com.apple.screencapture type -string "png"
+defaults write com.apple.finder DisableAllAnimations -bool true
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+defaults write com.apple.Finder AppleShowAllFiles -bool true
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder ShowStatusBar -bool false
+defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool YES
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+defaults write -g AppleReduceDesktopTinting -bool yes
+
+
+# Install Brew
+echo "Installing Brew..."
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew analytics off
+brew upgrade
+
+# Install Ansible and Stow
+echo "Installing Core Packages..."
+brew install ansible
+brew install stow
+
+csrutil status
+echo "(Yabai): Do not forget to disable SIP before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection'."
+echo "(Yabai): Installing from --HEAD, make sure to create a self signed certifcate called `yabi-cert` before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(from-HEAD)'."
+echo "Run Ansible to complete setup. Include '--ask-vault-pass -t never' to include SSH. 'ansible-pull git@github.com:jonathonadams/ansible.git --ask-become-pass --ask-vault-pass -t never' ...\n"
+echo "(GitHub): ensure to run `gh auth login` after setup is complete"
+
+

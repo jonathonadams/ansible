@@ -1,0 +1,19 @@
+- name: install Homebrew Casks
+  community.general.homebrew_cask:
+    name: 
+      - docker
+      - brave-browser
+      - httpie
+      - kitty
+  tags:
+    - install
+    - apps
+
+- name: Install a App Store Apps
+  community.general.mas:
+    id:
+      - 1352778147 # Bitwarden
+    state: present
+  tags:
+    - install
+    - apps

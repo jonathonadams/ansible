@@ -1,0 +1,56 @@
+- name: Install Homebrew ZSH
+  community.general.homebrew:
+    name: zsh
+    state: present
+  tags: &tags_for_zsh_tasks [ 'install', 'dotfiles', 'zsh' ]
+
+- name: Check if HomeBrew ZSH in allowed shells 
+  shell: grep -Fxq '/usr/local/bin/zsh' /etc/shells
+  failed_when: "brew_zsh_allowed.rc != 0 and brew_zsh_allowed.rc != 1"
+  register: brew_zsh_allowed 
+  tags: *tags_for_zsh_tasks
+
+- name: Add Homebrew ZSH to allowed shells
+  become: yes
+  shell: echo '/usr/local/bin/zsh' | tee -a /etc/shells > /dev/null
+  when: brew_zsh_allowed.rc != 0 
+  tags: *tags_for_zsh_tasks
+    
+- name: Change shell to Zsh
+  become: yes
+  shell: chsh -s /usr/local/bin/zsh
+  when: brew_zsh_allowed.rc != 0 
+  tags: *tags_for_zsh_tasks
+
+- name: Check that oh-my-zsh is installed
+  stat:
+    path: ~/.oh-my-zsh
+  register: oh_my_stats
+  tags: *tags_for_zsh_tasks
+
+  # --keep-zshrc doesn't rename .zshrc -> .zshrc.pre-oh-my-zsh
+- name: Oh-My-Zsh
+  shell: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc 
+  tags: *tags_for_zsh_tasks
+  when: oh_my_stats.stat.exists == False
+
+- name: Install ZSH Autosuggestions
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
+    dest: "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+  when: oh_my_stats.stat.exists == False
+  tags: *tags_for_zsh_tasks
+
+- name: Install ZSH Syntax Highlighting
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
+    dest: "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+  when: oh_my_stats.stat.exists == False
+  tags: *tags_for_zsh_tasks
+
+- name: Install ZSH Autoupdate 
+  ansible.builtin.git:
+    repo: 'https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git'
+    dest: "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate"
+  when: oh_my_stats.stat.exists == False
+  tags: *tags_for_zsh_tasks

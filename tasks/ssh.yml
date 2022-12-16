@@ -1,0 +1,31 @@
+- name: Ensure .ssh directory exists.
+  file:
+    dest: "{{ dest_key | dirname }}"
+    mode: 0700
+    state: directory
+  tags: &tags_for_ssh_tasks [ 'install', 'dotfiles', 'ssh' ]
+
+- name: Install ssh key
+  copy:
+    src: "{{ source_key }}"
+    dest: "{{ dest_key }}"
+    mode: 0600
+  tags: *tags_for_ssh_tasks
+
+- name: Install public ssh key 
+  copy:
+    src: "{{ source_key }}.pub"
+    dest: "{{ dest_key }}.pub"
+    mode: 0644
+  tags: *tags_for_ssh_tasks
+
+- name: Copy Config 
+  copy:
+    src: "{{ source_dir }}/config"
+    dest: "{{ dest_dir }}/config"
+    mode: 0644
+  tags: *tags_for_ssh_tasks
+    
+- name: Add ssh key to ssh-agent 
+  shell: ssh-add --apple-use-keychain {{ dest_key }}
+  tags: *tags_for_ssh_tasks

@@ -1,0 +1,13 @@
+- name: Cloning .dotfiles
+  ansible.builtin.git:
+    repo: 'git@github.com:jonathonadams/.dotfiles.git'
+    dest: "{{ dotfiles }}"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags: &tags_for_stow_tasks [ 'install', 'dotfiles'] 
+
+- name: Stow dotfiles
+  shell: "{{ dotfiles }}/install"
+  tags: *tags_for_stow_tasks

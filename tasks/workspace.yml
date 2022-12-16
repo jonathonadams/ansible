@@ -1,0 +1,100 @@
+- name: Add Brew Taps
+  community.general.homebrew_tap:
+    name: 
+      - FelixKratz/formulae # Sketchybar
+      - homebrew/cask-fonts # Hack Nerd Fonts
+  tags:
+    - install
+    - workspace
+
+- name: Install Fonts (1)
+  ansible.builtin.copy:
+    src: "{{ dotfiles }}/personal/fonts/"
+    dest: ~/Library/Fonts/
+  tags:
+    - fonts
+    - install
+    
+- name: Install Fonts (2)
+  community.general.homebrew_cask:
+    name: 
+      - font-hack-nerd-font
+      - sf-symbols # San Fransico (Apple) symbols
+  tags:
+    - fonts
+    - install
+
+- name: Install Fonts (3)
+  shell: curl -L https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v1.0.3/sketchybar-app-font.ttf -o $HOME/Library/Fonts/sketchybar-app-font.ttf
+  tags:
+    - fonts
+    - install
+
+- name: Install yabai window manager
+  community.general.homebrew:
+    name: koekeishiya/formulae/yabai
+    install_options: HEAD
+  tags:
+    - install
+    - workspace
+    - yabai
+
+
+- name: Create yabai digest
+  shell: shasum -a 256 $(which yabai)
+  # Must use the brew --prefix as "which yabai" is just a simlink
+  # shell: shasum -a 256 "$(brew --prefix yabai)/bin/yabai"
+  register: yabai_digest
+  tags:
+    - workspace
+    - yabai
+
+
+- name: Add yabai to sudoers 
+  community.general.sudoers:
+    name: yabai 
+    user: "{{ lookup('env', 'USER') }}"
+    runas: root
+    commands: "sha256:{{ yabai_digest.stdout }} --load-sa"
+    sudoers_path: /private/etc/sudoers.d
+  become: yes
+  tags:
+    - workspace
+    - yabai
+
+
+- name: Start yabai service
+  shell: brew services start yabai
+  tags:
+    - workspace
+    - yabai
+
+
+- name: Install skyd hotkey daemon 
+  community.general.homebrew:
+    name: koekeishiya/formulae/skhd
+  tags:
+    - install
+    - workspace
+    - skhd
+
+
+- name: Start skhd service
+  shell: brew services start skhd
+  tags:
+    - workspace
+    - skhd
+
+- name: Install sketchybar 
+  community.general.homebrew:
+    name: sketchybar
+  tags:
+    - install
+    - workspace
+    - sketchybar
+    
+- name: Start sketchybar service
+  shell: brew services start sketchybar
+  tags:
+    - workspace
+    - sketchybar

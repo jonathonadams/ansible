@@ -1,0 +1,38 @@
+- hosts: localhost
+  vars:
+    source_dir: "./.ssh"
+    source_key: "./.ssh/id_ed25519"
+    dest_dir: "{{ lookup('env', 'HOME') }}/.ssh"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+    dotfiles: "{{ lookup('env', 'HOME') }}/.dotfiles"
+    personal: "{{ lookup('env', 'HOME') }}/personal"
+  pre_tasks:
+    - name: Update HomeBrew
+      community.general.homebrew:
+        update_homebrew: yes
+        upgrade_all: yes
+      tags:
+        - install
+        - core
+  tasks:
+      # SSH must be done first for git cloning
+    - name: Setup SSH keys
+      ansible.builtin.import_tasks: tasks/ssh.yml
+      tags: never
+      # Stow is installed in the 'install' script
+    - name: Stow .dotfiles
+      ansible.builtin.import_tasks: tasks/dotfiles.yml
+      # Put ZSH up top as some of plugins installed are required later
+    - name: Setup ZSH
+      ansible.builtin.import_tasks: tasks/zsh.yml
+      # .dotfiles must be installed as it also clones private repos
+    - name: Setup Workspace
+      ansible.builtin.import_tasks: tasks/workspace.yml
+    - name: Install packages
+      ansible.builtin.import_tasks: tasks/packages.yml
+      # Brew casks must be last
+    - name: Install Apps
+      ansible.builtin.import_tasks: tasks/apps.yml
+      # Install Personal git repos 
+    - name: Install Apps
+      ansible.builtin.import_tasks: tasks/personal.yml

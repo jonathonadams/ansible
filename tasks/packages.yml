@@ -1,0 +1,67 @@
+- name: Install System Packages
+  community.general.homebrew:
+    name: 
+      - tmux
+      - fzf
+      - tldr
+      - fd
+      - git
+      - gh
+      - httpie
+      - direnv
+      - pyenv
+      - go
+      - duckdb
+    state: present
+  tags:
+    - install
+    - core
+
+- name: Init fzf
+  shell: yes | $(brew --prefix)/opt/fzf/install
+
+- name: Install nvm
+  ansible.builtin.shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  tags:
+    - install
+    - node
+
+# Note
+- name: Install Current Node version
+  shell: nvm install node
+  tags:
+    - install
+    - node
+
+- name: Install poetry
+  shell: curl -sSL https://install.python-poetry.org | python3 -
+  tags:
+    - install
+    - python
+      
+- name: Install poetry autocompletion
+  shell: mkdir $ZSH_CUSTOM/plugins/poetry && poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
+  tags:
+    - install
+    - python
+      
+- name: Set Poetry local config 
+  shell: poetry config virtualenvs.in-project true
+  tags:
+    - install
+    - python
+      
+- name: Install Rust
+  shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
+  tags:
+    - install
+    - rust
+
+- name: Install wasm-pack
+  shell: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+  tags:
+    - install
+    - rust
