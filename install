@@ -12,8 +12,6 @@ defaults write com.apple.dock mru-spaces -bool false # Mission Control Auto Aran
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write NSGlobalDomain _HIHideMenuBar -bool true
-# defaults write NSGlobalDomain AppleHighlightColor -string "0.65098 0.85490 0.58431"
-# defaults write NSGlobalDomain AppleAccentColor -int 1
 defaults write com.apple.screencapture location -string "$HOME/Desktop"
 defaults write com.apple.screencapture disable-shadow -bool true
 defaults write com.apple.screencapture type -string "png"
@@ -48,10 +46,13 @@ echo "Installing Core Packages..."
 brew install ansible
 brew install stow
 
+# Cloning setup project
+git clone https://github.com/jonathonadams/ansible.git ~/personal/ansible
+
 csrutil status
+# echo "(Yabai): Installing from --HEAD, make sure to create a self signed certifcate called 'yabi-cert' before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(from-HEAD)'."
 echo "(Yabai): Do not forget to disable SIP before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection'."
-echo "(Yabai): Installing from --HEAD, make sure to create a self signed certifcate called `yabi-cert` before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(from-HEAD)'."
-echo "Run Ansible to complete setup. Include '--ask-vault-pass -t never' to include SSH. 'ansible-pull git@github.com:jonathonadams/ansible.git --ask-become-pass --ask-vault-pass -t never' ...\n"
+echo "Run Ansible to complete setup. Include '--ask-vault-pass -t never' to include SSH. 'ansible-playbook ~/persona/ansible/local.yml --ask-become-pass --ask-vault-pass -t never' ...\n"
 echo "(GitHub): ensure to run `gh auth login` after setup is complete"
 
 
