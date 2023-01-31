@@ -5,7 +5,7 @@ echo "Installing commandline tools..."
 xcode-select --install
 
 # macOS Settings
-echo "Changing macOS defaults..."
+echo "Changing macOS default settings..."
 defaults write com.apple.spaces spans-displays -bool false
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock mru-spaces -bool false # Mission Control Auto Arange Spaces
@@ -33,6 +33,12 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 defaults write -g AppleReduceDesktopTinting -bool yes
+
+# Script custom OS level keybidings
+# https://developer.apple.com/library/archive/technotes/tn2450/_index.html#//apple_ref/doc/uid/DTS40017618-CH1-KEY_TABLE_USAGES
+echo "Setting keybindings..."
+# Set CapsLock -> Esc
+hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x700000029}]}'
 
 
 # Install Brew

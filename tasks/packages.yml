@@ -1,11 +1,12 @@
 - name: Install System Packages
   community.general.homebrew:
     name: 
+      - git
       - tmux
       - fzf
+      - ripgrep
       - tldr
       - fd
-      - git
       - gh
       - httpie
       - direnv
@@ -17,12 +18,27 @@
     - install
     - core
 
+- name: Install Python build dependencies
+  community.general.homebrew:
+    name: 
+      - duckdb
+      - openssl
+      - readline
+      - sqlite3
+      - xz
+      - zlib
+      - tcl-tk
+    state: present
+  tags:
+    - install
+    - python
+
 - name: Init fzf
   shell: yes | $(brew --prefix)/opt/fzf/install
 
 - name: Install nvm
   ansible.builtin.shell: >
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
   tags:
@@ -38,18 +54,6 @@
 
 - name: Install poetry
   shell: curl -sSL https://install.python-poetry.org | python3 -
-  tags:
-    - install
-    - python
-      
-- name: Install poetry autocompletion
-  shell: mkdir $ZSH_CUSTOM/plugins/poetry && poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
-  tags:
-    - install
-    - python
-      
-- name: Set Poetry local config 
-  shell: poetry config virtualenvs.in-project true
   tags:
     - install
     - python

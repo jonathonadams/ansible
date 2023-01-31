@@ -33,7 +33,6 @@
 - name: Install yabai window manager
   community.general.homebrew:
     name: koekeishiya/formulae/yabai
-    install_options: HEAD
   tags:
     - install
     - workspace
