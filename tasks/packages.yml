@@ -13,6 +13,7 @@
       - pyenv
       - go
       - duckdb
+      - neovim
     state: present
   tags:
     - install

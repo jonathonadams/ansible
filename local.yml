@@ -28,8 +28,6 @@
       # .dotfiles must be installed as it also clones private repos
     - name: Setup workspace
       ansible.builtin.import_tasks: tasks/workspace.yml
-    - name: Setup NeoVim
-      ansible.builtin.import_tasks: tasks/nvim.yml
     - name: Install packages
       ansible.builtin.import_tasks: tasks/packages.yml
       # Brew casks must be last
