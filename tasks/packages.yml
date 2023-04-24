@@ -46,13 +46,6 @@
     - install
     - node
 
-# Note
-- name: Install Current Node version
-  shell: nvm install node
-  tags:
-    - install
-    - node
-
 - name: Install poetry
   shell: curl -sSL https://install.python-poetry.org | python3 -
   tags:
@@ -61,12 +54,6 @@
       
 - name: Install Rust
   shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
-  tags:
-    - install
-    - rust
-
-- name: Install wasm-pack
-  shell: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
   tags:
     - install
     - rust

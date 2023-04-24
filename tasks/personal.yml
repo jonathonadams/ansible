@@ -1,6 +1,0 @@
-- name: Cloning Ansible 
-  ansible.builtin.git:
-    repo: 'git@github.com:jonathonadams/ansible.git'
-    dest: "{{ personal }}/ansible"
-    version: main
-  tags: &tags_for_stow_tasks [ 'install', 'personal'] 

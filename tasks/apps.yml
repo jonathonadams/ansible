@@ -5,15 +5,7 @@
       - brave-browser
       - httpie
       - kitty
-  tags:
-    - install
-    - apps
-
-- name: Install a App Store Apps
-  community.general.mas:
-    id:
-      - 1352778147 # Bitwarden
-    state: present
+      - visual-studio-code
   tags:
     - install
     - apps

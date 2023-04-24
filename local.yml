@@ -33,6 +33,3 @@
       # Brew casks must be last
     - name: Install apps
       ansible.builtin.import_tasks: tasks/apps.yml
-      # Install Personal git repos 
-    - name: Install personale projects
-      ansible.builtin.import_tasks: tasks/personal.yml
