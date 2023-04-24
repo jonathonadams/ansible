@@ -54,10 +54,9 @@ else
     echo "Updating Brew..."
     brew update
 fi
-brew analytics off
-
-brew install ansible
-brew install stow
+/opt/homebrew/bin/brew analytics off
+/opt/homebrew/bin/brew install ansible
+/opt/homebrew/bin/brew install stow
 
 echo "Cloning setup project"
 git clone https://github.com/jonathonadams/ansible.git ~/personal/ansible
