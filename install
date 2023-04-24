@@ -50,13 +50,16 @@ if [[ $? != 0 ]] ; then
     echo "Installing Brew..."
     # Install Homebrew
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Add brew to path
+    (echo;  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/jadams/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 else
     echo "Updating Brew..."
     brew update
 fi
-/opt/homebrew/bin/brew analytics off
-/opt/homebrew/bin/brew install ansible
-/opt/homebrew/bin/brew install stow
+brew analytics off
+brew install ansible
+brew install stow
 
 echo "Cloning setup project"
 git clone https://github.com/jonathonadams/ansible.git ~/personal/ansible
