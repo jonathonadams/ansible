@@ -45,23 +45,25 @@ echo "Setting keybindings..."
 hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x700000029}]}'
 
 # Install Brew
-echo "Installing Brew..."
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+which brew
+if [[ $? != 0 ]] ; then
+    echo "Installing Brew..."
+    # Install Homebrew
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+    echo "Updating Brew..."
+    brew update
+fi
 brew analytics off
-brew upgrade
 
-# Install Ansible and Stow
-echo "Installing Core Packages..."
 brew install ansible
 brew install stow
 
-# Cloning setup project
+echo "Cloning setup project"
 git clone https://github.com/jonathonadams/ansible.git ~/personal/ansible
 
 csrutil status
 # echo "(Yabai): Installing from --HEAD, make sure to create a self signed certifcate called 'yabi-cert' before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(from-HEAD)'."
 echo "(Yabai): Do not forget to disable SIP before running Ansible: 'https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection'."
 echo "Run Ansible to complete setup. Include '--ask-vault-pass -t never' to include SSH. 'ansible-playbook ~/persona/ansible/local.yml --ask-become-pass --ask-vault-pass -t never' ...\n"
-echo "(GitHub): ensure to run `gh auth login` after setup is complete"
-
-
+echo "(GitHub): ensure to run 'gh auth login' after setup is complete"
