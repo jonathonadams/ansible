@@ -7,6 +7,16 @@
     - install
     - workspace
 
+- name: Install workspace services
+  community.general.homebrew:
+    name: 
+      - koekeishiya/formulae/yabai
+      - koekeishiya/formulae/skhd
+      - sketchybar
+  tags:
+    - install
+    - workspace
+
 - name: Install Fonts (1)
   ansible.builtin.copy:
     src: "{{ dotfiles }}/personal/fonts/"
@@ -29,14 +39,6 @@
   tags:
     - fonts
     - install
-
-- name: Install yabai window manager
-  community.general.homebrew:
-    name: koekeishiya/formulae/yabai
-  tags:
-    - install
-    - workspace
-    - yabai
 
 
 - name: Create yabai digest
@@ -63,39 +65,11 @@
     - yabai
     - sudoers
 
-
-- name: Start yabai service
-  shell: brew services start yabai
+- name: start services
+  ansible.builtin.shell: |
+    brew services start yabai 
+    brew services start skhd
+    brew services start sketchybar
   tags:
     - workspace
-    - yabai
-
-
-- name: Install skyd hotkey daemon 
-  community.general.homebrew:
-    name: koekeishiya/formulae/skhd
-  tags:
-    - install
-    - workspace
-    - skhd
-
-
-- name: Start skhd service
-  shell: brew services start skhd
-  tags:
-    - workspace
-    - skhd
-
-- name: Install sketchybar 
-  community.general.homebrew:
-    name: sketchybar
-  tags:
-    - install
-    - workspace
-    - sketchybar
-    
-- name: Start sketchybar service
-  shell: brew services start sketchybar
-  tags:
-    - workspace
-    - sketchybar
+    - services

@@ -37,20 +37,20 @@
 - name: Install ZSH Autosuggestions
   ansible.builtin.git:
     repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
-    dest: "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
   when: oh_my_stats.stat.exists == False
   tags: *tags_for_zsh_tasks
 
 - name: Install ZSH Syntax Highlighting
   ansible.builtin.git:
     repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
-    dest: "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
   when: oh_my_stats.stat.exists == False
   tags: *tags_for_zsh_tasks
 
 - name: Install ZSH Autoupdate 
   ansible.builtin.git:
     repo: 'https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git'
-    dest: "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate"
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/autoupdate"
   when: oh_my_stats.stat.exists == False
   tags: *tags_for_zsh_tasks
