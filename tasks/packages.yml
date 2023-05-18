@@ -15,6 +15,7 @@
       - duckdb
       - neovim
       - jq
+      - ruff
     state: present
   tags:
     - install

@@ -40,7 +40,6 @@
     - fonts
     - install
 
-
 - name: Create yabai digest
   shell: shasum -a 256 $(which yabai)
   # Must use the brew --prefix as "which yabai" is just a simlink
@@ -73,3 +72,14 @@
   tags:
     - workspace
     - services
+
+- name: Cloning tmux package manager 
+  ansible.builtin.git:
+    repo: 'https://github.com/tmux-plugins/tpm'
+    dest: '~/.tmux/plugins/tpm'
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags:
+    - workspace
+    - tmux 
