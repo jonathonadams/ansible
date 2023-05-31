@@ -19,6 +19,21 @@
     mode: 0644
   tags: *tags_for_ssh_tasks
 
+- name: Install SA ssh key
+  copy:
+    src: "{{ source_key }}_sa"
+    dest: "{{ dest_key }}_sa"
+    mode: 0600
+  tags: *tags_for_ssh_tasks
+
+- name: Install SA public ssh key 
+  copy:
+    src: "{{ source_key }}_sa.pub"
+    dest: "{{ dest_key }}_sa.pub"
+    mode: 0644
+  tags: *tags_for_ssh_tasks
+
+
 - name: Copy Config 
   copy:
     src: "{{ source_dir }}/config"
@@ -28,4 +43,8 @@
     
 - name: Add ssh key to ssh-agent 
   shell: ssh-add --apple-use-keychain {{ dest_key }}
+  tags: *tags_for_ssh_tasks
+
+- name: Add SA ssh key to ssh-agent 
+  shell: ssh-add --apple-use-keychain {{ dest_key }}_sa
   tags: *tags_for_ssh_tasks
