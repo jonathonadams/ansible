@@ -16,6 +16,7 @@
       - neovim
       - jq
       - ruff
+      - pnpm
     state: present
   tags:
     - install
